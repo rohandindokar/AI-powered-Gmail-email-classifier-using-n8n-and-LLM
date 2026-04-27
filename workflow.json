@@ -1,0 +1,439 @@
+{
+  "name": "Email Labeler",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Email Sorting Agent\n",
+        "height": 1424,
+        "width": 2492
+      },
+      "id": "2f2e413f-3e9f-4191-a87e-d7bdb3fb31c9",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1968,
+        -368
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "id": "638f8c5c-7770-4dc8-8033-abb4540875ed",
+      "name": "Gmail Trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "position": [
+        -1664,
+        464
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "yRcLCAUaR8q4ccgj",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputText": "=Email Subject: {{ $json.Subject }}\n\nEMail From: {{ $json.From }}\n\n------\n##Email Snippet: \n{{ $json.snippet }}\n\n",
+        "categories": {
+          "categories": [
+            {
+              "category": "Academics",
+              "description": "Assignments, exams, lectures, syllabus, study material"
+            },
+            {
+              "category": "Faculty",
+              "description": "Emails directly from professors or teaching staff"
+            },
+            {
+              "category": "Announcements",
+              "description": "General college announcements and notices"
+            },
+            {
+              "category": "Events",
+              "description": "Workshops, hackathons, seminars, webinars"
+            },
+            {
+              "category": "Placements",
+              "description": "Internships, job opportunities, placement drives"
+            },
+            {
+              "category": "Administrative",
+              "description": "Fees, documents, forms, official processes"
+            },
+            {
+              "category": "Urgent",
+              "description": "Emails requiring immediate attention or deadlines"
+            },
+            {
+              "category": "Automated",
+              "description": "System-generated emails like classroom or portal updates"
+            }
+          ]
+        },
+        "options": {
+          "fallback": "other"
+        }
+      },
+      "id": "069bcd47-f6db-4d2a-a8e8-5fca080c687c",
+      "name": "Classify Emails",
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "position": [
+        -1136,
+        144
+      ],
+      "typeVersion": 1,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "model": "qwen/qwen3-32b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -1136,
+        640
+      ],
+      "id": "fb009bac-ef90-4343-9d4c-b6cce8908ea0",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "gG611GYOpEZJGz6B",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_6582375445319246439"
+        ]
+      },
+      "id": "b429ed23-08d0-4995-953b-632b2dff130b",
+      "name": "Gmail - Label as Academics",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        -656,
+        -288
+      ],
+      "webhookId": "3e488d4d-5528-48c7-b363-1391368efd8e",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "yRcLCAUaR8q4ccgj",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_2345474962606385842"
+        ]
+      },
+      "id": "b0ff3105-6c95-4284-8c67-2ce0f0dd08c3",
+      "name": "Gmail - Label as Faculty",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        -176,
+        -320
+      ],
+      "webhookId": "3e488d4d-5528-48c7-b363-1391368efd8e",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "yRcLCAUaR8q4ccgj",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_8084867092354663059"
+        ]
+      },
+      "id": "d645ae47-1776-402a-898c-b98adc2a37c6",
+      "name": "Gmail - Label as Announcements",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        -192,
+        -128
+      ],
+      "webhookId": "3e488d4d-5528-48c7-b363-1391368efd8e",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "yRcLCAUaR8q4ccgj",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_7340183091592634694"
+        ]
+      },
+      "id": "ef1e6fc5-2519-4ba5-a433-4bdf58918be1",
+      "name": "Gmail - Label as Events",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        -192,
+        64
+      ],
+      "webhookId": "3e488d4d-5528-48c7-b363-1391368efd8e",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "yRcLCAUaR8q4ccgj",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_8401904645517808157"
+        ]
+      },
+      "id": "16c2080d-4adb-45c5-9b15-6b909f9eaaec",
+      "name": "Gmail - Label as Administrative",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        -192,
+        464
+      ],
+      "webhookId": "3e488d4d-5528-48c7-b363-1391368efd8e",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "yRcLCAUaR8q4ccgj",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_1843392035933057119"
+        ]
+      },
+      "id": "857d9744-6997-466f-a2e3-001973fe18b9",
+      "name": "Gmail - Label as Placement",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        -192,
+        240
+      ],
+      "webhookId": "3e488d4d-5528-48c7-b363-1391368efd8e",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "yRcLCAUaR8q4ccgj",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_7509386645338753915"
+        ]
+      },
+      "id": "523dacd9-6d95-4ac3-bbf7-a23245956380",
+      "name": "Gmail - Label as Urgent",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        -192,
+        656
+      ],
+      "webhookId": "3e488d4d-5528-48c7-b363-1391368efd8e",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "yRcLCAUaR8q4ccgj",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_8250932265353875551"
+        ]
+      },
+      "id": "1fa00246-c2f1-4645-b7de-6689a84e3588",
+      "name": "Gmail - Label as Automated",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        -192,
+        848
+      ],
+      "webhookId": "3e488d4d-5528-48c7-b363-1391368efd8e",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "yRcLCAUaR8q4ccgj",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_398995160160278456"
+        ]
+      },
+      "id": "be6239be-32a1-473a-ae78-4aaefd16dd85",
+      "name": "Gmail - Label as Other",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        -608,
+        832
+      ],
+      "webhookId": "3e488d4d-5528-48c7-b363-1391368efd8e",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "yRcLCAUaR8q4ccgj",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Classify Emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Emails": {
+      "main": [
+        [
+          {
+            "node": "Gmail - Label as Academics",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail - Label as Faculty",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail - Label as Announcements",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail - Label as Events",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail - Label as Placement",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail - Label as Administrative",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail - Label as Urgent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail - Label as Automated",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail - Label as Other",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Classify Emails",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "3380e436-cadd-4949-b017-fcdc99b5dde8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5a2383aede5ed1316847d5e5d7279c3fc97aa3e0188d81883b984e2db5e7ab5f"
+  },
+  "id": "ep1ajhkGJQaVgpZUrEMwq",
+  "tags": []
+}
